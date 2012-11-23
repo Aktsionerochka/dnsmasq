@@ -10,7 +10,3 @@ add dns-script option to your dnsmasq.conf
 * when user query domain a record like: www.edu.cn
 * will be execute: "/opt/line2.sh 202.112.0.36"
 
-BUG
-=======
-* please define a alias or log-queries in your config file
-* else it does'nt work!
