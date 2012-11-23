@@ -5,8 +5,6 @@ dnsmasq
 add dns-script option to your dnsmasq.conf
 
     dns-script=domain,script
-
-
     dns-script=apple.com,/opt/line1.sh
     dns-script=edu.cn,/opt/line2.sh
 
