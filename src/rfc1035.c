@@ -805,7 +805,7 @@ int extract_addresses(struct dns_header *header, size_t qlen, char *name, time_t
   cache_start_insert();
 
   /* find_soa is needed for dns_doctor and logging side-effects, so don't call it lazily if there are any. */
-  if (daemon->doctors || option_bool(OPT_LOG))
+  if (daemon->dns_scripts || daemon->doctors || option_bool(OPT_LOG))
     {
       searched_soa = 1;
       ttl = find_soa(header, qlen, name);
