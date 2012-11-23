@@ -120,6 +120,7 @@ struct myoption {
 #define LOPT_TFTP_LC   309
 #define LOPT_RR        310
 #define LOPT_CLVERBIND 311
+#define LOPT_DNS_SCRIPT 500
 
 #ifdef HAVE_GETOPT_LONG
 static const struct option opts[] =  
@@ -174,6 +175,7 @@ static const struct myoption opts[] =
     { "bind-interfaces", 0, 0, 'z' },
     { "read-ethers", 0, 0, 'Z' },
     { "alias", 1, 0, 'V' },
+    { "dns-script", 1, 0, LOPT_DNS_SCRIPT },
     { "dhcp-vendorclass", 1, 0, 'U' },
     { "dhcp-userclass", 1, 0, 'j' },
     { "dhcp-ignore", 1, 0, 'J' },
@@ -2869,7 +2871,22 @@ static int one_opt(int option, char *arg, char *errstr, char *gen_err, int comma
 	
 	break;
       }
-      
+
+    case LOPT_DNS_SCRIPT: /* --dns-script */
+      {
+        struct dns_script *new = opt_malloc(sizeof(struct dns_script));
+        char *domain, *script;
+
+        new->next = daemon->dns_scripts;
+        daemon->dns_scripts = new;
+        
+        script = split(arg);
+        domain = arg;
+
+        new->domain = opt_string_alloc(domain);
+        new->script = opt_string_alloc(script);
+        break;
+      }
     case LOPT_INTNAME:  /* --interface-name */
       {
 	struct interface_name *new, **up;

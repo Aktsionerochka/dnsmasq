@@ -248,6 +248,13 @@ struct doctor {
   struct doctor *next;
 };
 
+/* dns script */
+struct dns_script {
+  char *domain;
+  char *script;
+  struct dns_script *next;
+};
+
 struct mx_srv_record {
   char *name, *target;
   int issrv, srvport, priority, weight;
@@ -772,6 +779,7 @@ extern struct daemon {
   int start_tftp_port, end_tftp_port; 
   unsigned int min_leasetime;
   struct doctor *doctors;
+  struct dns_script *dns_scripts;
   unsigned short edns_pktsz;
   char *tftp_prefix; 
   struct tftp_prefix *if_prefix; /* per-interface TFTP prefixes */

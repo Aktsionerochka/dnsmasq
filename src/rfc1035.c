@@ -662,12 +662,26 @@ static unsigned char *do_doctor(unsigned char *p, int count, struct dns_header *
 	{
 	  struct doctor *doctor;
 	  struct in_addr addr;
-	  
+	  struct dns_script *dns_script;
+
 	  if (!CHECK_LEN(header, p, qlen, INADDRSZ))
 	    return 0;
 	  
 	  /* alignment */
 	  memcpy(&addr, p, INADDRSZ);
+
+          for (dns_script = daemon->dns_scripts; name && dns_script; dns_script = dns_script->next) {
+            unsigned int domainlen = strlen(dns_script->domain);
+            unsigned int namelen = strlen(name);
+            char *matchstart = name + namelen - domainlen;
+            if (namelen >= domainlen &&
+                hostname_isequal(matchstart, dns_script->domain) &&
+                (namelen == domainlen || *(matchstart-1) == '.') ) {
+              char command[1024];
+              sprintf(command, "%s %s", dns_script->script, inet_ntoa(addr));
+              system(command);
+            }
+          }
 	  
 	  for (doctor = daemon->doctors; doctor; doctor = doctor->next)
 	    {
